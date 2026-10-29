@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta tomada del logo: corona azul real + fondo acuarela aqua → lavanda → orquídea */
+  --color-porcelain: #f6f4fc;
+  --color-paper: #ffffff;
+  --color-ink: #151a3d;
+  --color-ink-soft: #5a5f82;
+  --color-line: #e3e0f0;
+  --color-royal: #0b47a8;
+  --color-royal-dark: #083684;
+  --color-haze: #e7edff;
+  --color-aqua: #aee6f8;
+  --color-periwinkle: #98aefa;
+  --color-orchid: #d592f3;
+  --color-amber: #a85a0c;
+  --color-amber-soft: #fcefd9;
+  --color-danger: #b42318;
+  --color-danger-soft: #fdecea;
+  /* barras del gráfico: azul de la marca, contraste > 6:1 sobre blanco; hover en royal-dark */
+  --color-chart: #1f5bc4;
+
+  /* Radios más rectos que los de Tailwind (aprox. la mitad) */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.1875rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.75rem;
+  --radius-4xl: 1rem;
+
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: var(--font-anton), var(--font-onest), ui-sans-serif, sans-serif;
+  --font-script: var(--font-kaushan), cursive;
+}
+
+/* Degradado acuarela del logo */
+@utility bg-brand {
+  background:
+    radial-gradient(55% 60% at 8% 12%, var(--color-aqua) 0%, transparent 70%),
+    radial-gradient(50% 50% at 80% 18%, var(--color-periwinkle) 0%, transparent 70%),
+    radial-gradient(60% 60% at 92% 92%, var(--color-orchid) 0%, transparent 72%),
+    linear-gradient(135deg, #dcf3fb 0%, #e3e0fb 50%, #f1dcf9 100%);
+}
+
+html {
+  /* Anton y Kaushan sólo tienen peso 400: evita negritas sintéticas */
+  font-synthesis-weight: none;
+}
+
+body {
+  background:
+    radial-gradient(70rem 26rem at 0% 0%, color-mix(in oklab, var(--color-aqua) 30%, transparent), transparent) no-repeat,
+    radial-gradient(60rem 26rem at 100% 0%, color-mix(in oklab, var(--color-orchid) 18%, transparent), transparent) no-repeat,
+    var(--color-porcelain);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-royal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

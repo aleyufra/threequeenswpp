@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "3.0.135",
+    "@opennextjs/cloudflare": "^1.20.14",
     "@phosphor-icons/react": "2.1.10",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.118.0",
@@ -30,6 +31,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.155.0"
   }
 }

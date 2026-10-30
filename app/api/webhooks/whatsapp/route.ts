@@ -102,11 +102,18 @@ export async function POST(request: Request) {
   // Responder 200 de inmediato; el procesamiento (BD + agente + envío) corre después.
   if (verified.length > 0) {
     after(async () => {
-      const { error } = await createAdminClient()
-        .from("whatsapp_configs")
-        .update({ last_event_at: new Date().toISOString() })
-        .in("organization_id", verified.map((v) => v.credentials.organizationId));
+      const admin = createAdminClient();
+      const now = new Date().toISOString();
+      const orgIds = verified.map((v) => v.credentials.organizationId);
+      const { error } = await admin.from("whatsapp_configs").update({ last_event_at: now }).in("organization_id", orgIds);
       if (error) log("warn", "whatsapp.event_status_failed", { error: errorMessage(error) });
+      // Un evento firmado prueba que la suscripción funciona aunque no hayamos visto el GET de verificación
+      const { error: verifyError } = await admin
+        .from("whatsapp_configs")
+        .update({ webhook_verified_at: now })
+        .in("organization_id", orgIds)
+        .is("webhook_verified_at", null);
+      if (verifyError) log("warn", "whatsapp.event_status_failed", { error: errorMessage(verifyError) });
 
       for (const { credentials, values } of verified) {
         for (const value of values) {

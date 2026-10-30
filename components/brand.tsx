@@ -16,7 +16,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
       <BrandIcon />
       <span className="flex flex-col leading-none">
         <span className="font-wordmark text-xl tracking-wide text-ink uppercase">{BRAND_NAME}</span>
-        <span className="-mt-1 self-end pr-0.5 font-script text-base text-royal -rotate-3">Calzados</span>
+        <span className="relative z-10 -mt-2.5 self-end pr-0.5 font-script text-base text-royal -rotate-3">Calzados</span>
       </span>
     </span>
   );

@@ -32,6 +32,27 @@ export async function sendWhatsAppMessage(params: {
   return { wamid: json.messages?.[0]?.id ?? null };
 }
 
+// Marca el mensaje como leído y muestra «escribiendo…» hasta la respuesta (máx. 25 s)
+export async function sendTypingIndicator(params: { phoneNumberId: string; accessToken: string; messageId: string }) {
+  const res = await fetch(`${GRAPH_API_BASE}/${params.phoneNumberId}/messages`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${params.accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      status: "read",
+      message_id: params.messageId,
+      typing_indicator: { type: "text" },
+    }),
+  });
+  if (!res.ok) {
+    const json = (await res.json()) as GraphError;
+    throw new Error(`WhatsApp typing indicator failed (${res.status}): ${json.error?.message ?? "unknown error"}`);
+  }
+}
+
 // GET /{phone_number_id} para validar credenciales desde /integraciones
 export async function fetchPhoneNumberInfo(phoneNumberId: string, accessToken: string) {
   const res = await fetch(

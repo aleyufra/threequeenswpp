@@ -9,6 +9,7 @@ import { HISTORY_LIMIT, toModelMessages } from "@/lib/agent/history";
 import { runAgent } from "@/lib/agent/run";
 import type { WhatsAppCredentials } from "./config";
 import { sendAndRecord } from "./outbound";
+import { sendTypingIndicator } from "./send";
 import type { InboundMessage, WebhookValue } from "./types";
 
 const GREETING_INACTIVITY_MS = 12 * 60 * 60 * 1000;
@@ -145,6 +146,15 @@ async function processInboundMessage(
 
   if (!shouldReply) return "stored";
   if (!conversation.bot_active) return "stored_bot_inactive";
+
+  // Sin await: es cosmético y no debe retrasar ni bloquear la respuesta
+  sendTypingIndicator({
+    phoneNumberId: credentials.phoneNumberId,
+    accessToken: credentials.accessToken,
+    messageId: message.id,
+  }).catch((err) =>
+    log("warn", "whatsapp.typing_failed", { organization_id: orgId, wa_message_id: message.id, error: errorMessage(err) }),
+  );
 
   const lastActivity = previous?.last_message_at ? new Date(previous.last_message_at).getTime() : 0;
   const greet = Date.now() - lastActivity > GREETING_INACTIVITY_MS;
